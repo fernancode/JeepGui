@@ -1,4 +1,4 @@
-#kivy imports
+#works on desktop...
 import kivy
 from kivy.app import App
 from kivy.core.window import Window
