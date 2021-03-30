@@ -17,6 +17,9 @@ from kivy.properties import StringProperty
 #matplotlib
 import matplotlib.pyplot as plt
 
+#image stuff
+import smopy
+
 #get serial data
 #import serial.tools.list_ports
 
@@ -43,29 +46,32 @@ def make_button(command,func):
     """
     function for adding a lot of buttons
     """
+
     btn = Button(text=command)
     btn.bind(on_press = func)
     buttons.append(btn)
     return buttons
 
 def B1(instance):
-    now=datetime.now()
-    string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Arm"
-    string = {string:'out'}
+    print()
+    #now=datetime.now()
+    #string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Arm"
+    #string = {string:'out'}
     #add_messages(string)
     #device.send_data_broadcast('arm')
 
 def B2(instance):
-    now=datetime.now()
-    string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Disarm"
-    string = {string:'out'}
+    print()
+    #now=datetime.now()
+    #string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Disarm"
+    #string = {string:'out'}
     #add_messages(string)
     #device.send_data_broadcast('disarm')
 
 def B3(instance):
-    now=datetime.now()
-    string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Launch"
-    string = {string:'out'}
+    print()#now=datetime.now()
+    #string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Launch"
+    #string = {string:'out'}
     #add_messages(string)
     #device.send_data_broadcast('relay_on')
 
@@ -113,19 +119,24 @@ def update_gps(instance):
 ##READ SERIAL DATA, UPDATE PLOT AND POSITION IN BACKGROUND
 #create the plot, add it to the boxlayout
 
-BBox = [-97.78999, -97.77930, 30.35803, 30.36665]
-fig = plt.figure(figsize=(4,2))
-fig.patch.set_facecolor('black')
-ax = fig.add_axes([0,0,1,1])
+latlow = 30.358
+lathigh = 30.363
+lonlow = -97.790
+lonhigh = -97.7793
 
-lakewood_map = plt.imread("map.png")
-ax.set_xlim(BBox[0], BBox[1])
-ax.set_ylim(BBox[2], BBox[3])
-ax.imshow(lakewood_map, zorder=0, extent = BBox)
+fig, ax = plt.subplots()
+fig.patch.set_facecolor('black')
+
+lakewood_map = smopy.Map((latlow, lonlow, lathigh, lonhigh), z=17)
+lakewood_map.show_mpl(ax=ax)
+
+x, y = lakewood_map.to_pixels((latlow+lathigh)/2, (lonlow+lonhigh)/2)
+
+plt.plot(x,y)
+
 
 gps_map= BoxLayout(orientation='vertical')
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-
 
 latlon_display_string = " "
 mgrs_display_string = " "
@@ -151,9 +162,6 @@ gps_layout = BoxLayout(orientation='vertical')
 gps_layout.add_widget(gps_map)
 gps_layout.add_widget(gps_printout)
 
-
-
-        
 
 
 class MyApp(App):
