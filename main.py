@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import time
 
-Window.fullscreen = True
+Window.fullscreen = 'auto'
 
 ### how to make and add buttons - needed for AC later
 def Arm(instance):
