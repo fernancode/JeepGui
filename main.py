@@ -1,4 +1,4 @@
-#works on desktop...
+#works on desktop...and works on pi
 import kivy
 from kivy.app import App
 from kivy.core.window import Window
