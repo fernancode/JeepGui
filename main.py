@@ -226,6 +226,7 @@ for button in buttons:
 gps_layout = BoxLayout(orientation='horizontal')
 gps_map= BoxLayout(orientation='vertical')
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+update_gps()
 gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
 gps_handle = gps_printout
@@ -239,8 +240,6 @@ gps_layout.add_widget(gps_printout)
 #############################################################
 
 gpsd.connect()
-
-update_gps()
 
 class MyApp(App):
     def build(self):
