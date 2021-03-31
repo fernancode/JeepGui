@@ -60,8 +60,9 @@ direction = 0.0
 error = 0.0
 satellites = 0.0
 #startup display string
-mgrs_display_string = mgrs_format_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
-latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
+
+#mgrs_display_string = mgrs_format_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
+#latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
 
 
@@ -110,7 +111,12 @@ def LatLon_MGRS(instance):
         mgrs_mode = False
         gps_handle.text = mgrs_display_string
 
-def update_gps(instance):
+
+def regular_update(instance):
+    update_gps()
+
+
+def update_gps():
     """
     Update GPS info at regular intervals
     """
@@ -241,9 +247,8 @@ class MyApp(App):
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
-        Clock.schedule_interval(update_gps, 0.25)
+        Clock.schedule_interval(regular_update, 0.25)
         return total_layout
 
 if __name__ == '__main__':
     MyApp().run()
-    
