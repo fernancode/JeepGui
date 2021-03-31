@@ -221,6 +221,7 @@ gps_layout.add_widget(gps_printout)
 #############################################################
 
 gpsd.connect()
+update_gps()
 
 class MyApp(App):
     def build(self):
