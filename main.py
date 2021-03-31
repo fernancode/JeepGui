@@ -110,10 +110,8 @@ def LatLon_MGRS(instance):
         mgrs_mode = False
         #gps_handle.text = mgrs_display_string
 
-
 def regular_update(instance):
     update_gps()
-
 
 def update_gps():
     """
@@ -179,7 +177,6 @@ def update_gps():
         #TODO:
         map_url = "default openstreet map location"
 
- #   if mgrs_mode == True:
     mgrs_string = m.toMGRS(latitude, longitude)
     GZD = mgrs_string[0:3]
     SID = mgrs_string[3:5]
@@ -187,7 +184,6 @@ def update_gps():
     NSP = mgrs_string[10:15]
     mgrs_display_string = mgrs_format_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
-#    else:
     latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
     if mgrs_mode == True:
@@ -231,7 +227,6 @@ for button in buttons:
 gps_layout = BoxLayout(orientation='horizontal')
 gps_map= BoxLayout(orientation='vertical')
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-update_gps()
 gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
 gps_handle = gps_printout
