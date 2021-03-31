@@ -101,7 +101,7 @@ def LatLon_MGRS(instance):
         mgrs_mode = False
         #gps_handle.text = mgrs_display_string
 
-def update_gps(instance):
+def update_gps_string(instance):
     """
     Update GPS info at regular intervals
     """
@@ -175,6 +175,7 @@ def update_gps(instance):
     else:
         gps_handle.text = latlon_display_string
 
+    #TODO: TIMING CODE EXECUTION FOR WHEN MAP PLOTTING HAPPENS
     end = timer.time()
     print(end-start)
 
@@ -233,7 +234,7 @@ class MyApp(App):
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
-        Clock.schedule_interval(update_gps, 0.1)
+        Clock.schedule_interval(update_gps_string, 0.25)
         return total_layout
 
 if __name__ == '__main__':
