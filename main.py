@@ -112,6 +112,7 @@ def update_gps(instance):
     global mgrs_display_string
     global map_url
     global mgrs_mode
+    start = timer.time()
 
     try:
         packet = gpsd.get_current()
@@ -174,6 +175,9 @@ def update_gps(instance):
     else:
         gps_handle.text = latlon_display_string
 
+    end = timer.time()
+    print(end-start)
+
 
 ##############################################################
 #GPS plot stuff
@@ -229,12 +233,7 @@ class MyApp(App):
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
-
-        start = timer.time()
         Clock.schedule_interval(update_gps, 0.1)
-        end = timer.time()
-        print(end-start)
-
         return total_layout
 
 if __name__ == '__main__':
