@@ -130,8 +130,8 @@ def update_gps(instance):
         direction = 0
 
     try:
-        errorx, errorz = packet.position_precision()
-        errorx *= 3.28084
+        error, errorz = packet.position_precision()
+        error *= 3.28084
     except:
         error = 0
 
