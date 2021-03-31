@@ -190,7 +190,7 @@ gps_handle = gps_printout
 btn1 = make_button('B1',B1)
 btn2 = make_button('B2',B2)
 btn3 = make_button('B3',B3)
-btn4 = make_button('GPS \n  MODE',LatLon_MGRS)
+btn4 = make_button(' GPS \n MODE',LatLon_MGRS)
 btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
