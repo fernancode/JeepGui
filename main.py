@@ -17,6 +17,11 @@ from kivy.properties import StringProperty
 #matplotlib
 import matplotlib.pyplot as plt
 
+import numpy as np
+from six import BytesIO
+from six.moves.urllib.request import urlopen, Request
+
+##real poor resolution
 #image stuff
 import smopy
 
@@ -124,16 +129,55 @@ lathigh = 30.363
 lonlow = -97.790
 lonhigh = -97.7793
 
+def deg2num(latitude, longitude, zoom, do_round=True):
+    """Convert from latitude and longitude to tile numbers.
+    If do_round is True, return integers. Otherwise, return floating point
+    values.
+    Source: http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Python
+    """
+    lat_rad = np.radians(latitude)
+    n = 2.0 ** zoom
+    if do_round:
+        f = np.floor
+    else:
+        f = lambda x: x
+    xtile = f((longitude + 180.) / 360. * n)
+    ytile = f((1.0 - np.log(np.tan(lat_rad) + (1 / np.cos(lat_rad))) / np.pi) /
+              2. * n)
+    if do_round:
+        if isinstance(xtile, np.ndarray):
+            xtile = xtile.astype(np.int32)
+        else:
+            xtile = int(xtile)
+        if isinstance(ytile, np.ndarray):
+            ytile = ytile.astype(np.int32)
+        else:
+            ytile = int(ytile)
+    return (xtile, ytile)
+
+
+mymap = smopy.Map((latlow, lonlow, lathigh, lonhigh))
+
+fig, ax = plt.subplots()
+fig = plt.figure()
+fig.set_size_inches([1,1])
+fig.patch.set_facecolor('black')
+ax = plt.Axes(fig, [0,0,1,1])
+ax.set_axis_off()
+fig.add_axes(ax) 
+ax.imshow(mymap.img)
+
+
+#this method looked like shit
+"""
+## find a better way
 fig, ax = plt.subplots()
 fig.patch.set_facecolor('black')
-
 lakewood_map = smopy.Map((latlow, lonlow, lathigh, lonhigh), z=17)
 lakewood_map.show_mpl(ax=ax)
-
 x, y = lakewood_map.to_pixels((latlow+lathigh)/2, (lonlow+lonhigh)/2)
-
 plt.plot(x,y)
-
+"""
 
 gps_map= BoxLayout(orientation='vertical')
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
@@ -141,7 +185,7 @@ gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 latlon_display_string = " "
 mgrs_display_string = " "
 
-gps_printout = Label(text=latlon_display_string, size_hint=(1, 0.15), font_name=quantico, font_size = font_size, valign='top')
+gps_printout = Label(text=latlon_display_string, size_hint=(.35, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
 gps_handle = gps_printout
 
@@ -158,7 +202,7 @@ btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
 
-gps_layout = BoxLayout(orientation='vertical')
+gps_layout = BoxLayout(orientation='horizontal')
 gps_layout.add_widget(gps_map)
 gps_layout.add_widget(gps_printout)
 
