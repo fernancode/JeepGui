@@ -212,8 +212,8 @@ gps_map= BoxLayout(orientation='vertical')
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
 #TODO:#### change this to the categories but emtpy@!!
-#latlon_display_string = " "
-#mgrs_display_string = " "
+latlon_display_string = " "
+mgrs_display_string = " "
 
 gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
