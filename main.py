@@ -142,8 +142,8 @@ def update_gps(instance):
 
     try:
         time_object = packet.get_time()
-        date = time_object.strftime(%Y%m%d)
-        time = time_object.strftime(%H%M%S)
+        date = time_object.strftime("%Y%m%d")
+        time = time_object.strftime("%H%M%S")
     except:
         date = "----------"
         time = "--------"
