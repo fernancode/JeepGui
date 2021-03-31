@@ -52,11 +52,13 @@ GZD = "XXX"
 SID = "XX"
 EWP = "00000"
 NSP = "00000"
-altitude = 0
-speed = 0
-direction = 0
-error = 0
-satellites = 0
+latitude = 0.0
+longitude = 0.0
+altitude = 0.0
+speed = 0.0
+direction = 0.0
+error = 0.0
+satellites = 0.0
 #startup display string
 mgrs_display_string = mgrs_format_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
