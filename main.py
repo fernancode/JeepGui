@@ -38,7 +38,7 @@ import mgrs
 #####################################################
 Window.fullscreen = 'auto' # default to fullscreen
 Window.show_cursor = False # remove mouse
-font_size = 30 #font size
+font_size = 20 #font size
 quantico = "quantico.regular.ttf" #set font
 mgrs_mode = False # for switching inbetween modes
 
