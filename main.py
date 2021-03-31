@@ -43,7 +43,9 @@ quantico = "courier-prime-sans.ttf" #set font
 mgrs_mode = True # for switching inbetween modes
 #display strings for text
 latlon_format_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
+latlon_display_string = " "
 mgrs_format_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
+mgrs_display_string = " "
 
 
 
@@ -221,7 +223,7 @@ gps_layout.add_widget(gps_printout)
 #############################################################
 
 gpsd.connect()
-update_gps()
+#update_gps()
 
 class MyApp(App):
     def build(self):
