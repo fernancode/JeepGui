@@ -39,7 +39,7 @@ import mgrs
 Window.fullscreen = 'auto' # default to fullscreen
 Window.show_cursor = False # remove mouse
 font_size = 20 #font size
-quantico = "quantico.regular.ttf" #set font
+quantico = "courier-prime-sans.ttf" #set font
 mgrs_mode = False # for switching inbetween modes
 
 
@@ -114,7 +114,7 @@ def update_gps(instance):
 
     else:
         ### edit LatLon string
-        latlon_display_string = "Lat:\n30.123456\nLon:\n-97.123456\nAlt:\n500\nSats:\n" + b
+        latlon_display_string = "Lat: 30.123456\nLon: -97.123456\nAlt: 500\nSats: 8\n" + b
         gps_handle.text = latlon_display_string
 
 
@@ -176,7 +176,7 @@ gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 latlon_display_string = " "
 mgrs_display_string = " "
 
-gps_printout = Label(text=latlon_display_string, size_hint=(.35, 1), font_name=quantico, font_size = font_size, valign='top')
+gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
 gps_handle = gps_printout
 
