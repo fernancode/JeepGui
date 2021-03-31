@@ -56,13 +56,8 @@ def make_button(command,func):
     buttons.append(btn)
     return buttons
 
-def B1(instance):
-    print()
-    #now=datetime.now()
-    #string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Arm"
-    #string = {string:'out'}
-    #add_messages(string)
-    #device.send_data_broadcast('arm')
+def QUIT(instance):
+    App.get_running_app().stop()
 
 def B2(instance):
     print()
@@ -96,9 +91,9 @@ def update_gps(instance):
     """
     Update GPS info at regular intervals
     """
-    latlon_display_string = "    DecDeg\n  {date}\n   {time}\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} ft\nSat: {satellites:.0f}"
+    latlon_display_string = "    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} ft\nSat: {satellites:.0f}"
 
-    mgrs_display_string = "     MGRS\n  {date}\n   {time}\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} ft\nSat: {satellites:.0f}"
+    mgrs_display_string = "     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} ft\nSat: {satellites:.0f}"
 
 
     #poll the packet
@@ -199,10 +194,10 @@ gps_handle = gps_printout
 # ADD ALL BUTTONS, NEST BOXES, AND MAP TO FUNCTIONS
 ############################################################
 
-btn1 = make_button('B1',B1)
+btn1 = make_button('  GPS\nMODE',LatLon_MGRS)
 btn2 = make_button('B2',B2)
 btn3 = make_button('B3',B3)
-btn4 = make_button(' GPS \nMODE',LatLon_MGRS)
+btn4 = make_button('QUIT',QUIT)
 btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
