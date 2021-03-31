@@ -206,7 +206,6 @@ ax.imshow(mymap.img)
 
 
 
-
 ############################################################
 # ADD ALL BUTTONS, NEST BOXES, AND MAP TO FUNCTIONS
 ############################################################
@@ -218,7 +217,6 @@ btn4 = make_button('QUIT',QUIT)
 btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
-
 
 gps_layout = BoxLayout(orientation='horizontal')
 gps_map= BoxLayout(orientation='vertical')
@@ -236,7 +234,7 @@ gps_layout.add_widget(gps_printout)
 #############################################################
 
 gpsd.connect()
-#update_gps()
+update_gps()
 
 class MyApp(App):
     def build(self):
@@ -248,3 +246,4 @@ class MyApp(App):
 
 if __name__ == '__main__':
     MyApp().run()
+    
