@@ -114,7 +114,7 @@ def update_gps(instance):
 
     else:
         ### edit LatLon string
-        latlon_display_string = "\n2013-01-24\nT08:56:30\nLat: 30.12345\nLon: 97.12345\nAlt: 500 ft\nSpeed: 0.0mph\nHeading: 123.7 deg\nSatellites: 8\n" + b
+        latlon_display_string = "\n2013-01-24\n08:56:30\nLat: 30.12345\nLon: -97.12345\nAlt: 500 ft\nVel: 0.0mph\nDir: 123.7 deg\nSat: 8\nCtr: " + b
         gps_handle.text = latlon_display_string
 
 
