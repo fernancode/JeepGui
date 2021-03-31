@@ -40,7 +40,7 @@ Window.fullscreen = 'auto' # default to fullscreen
 Window.show_cursor = False # remove mouse
 font_size = 22.5 #font size
 quantico = "courier-prime-sans.ttf" #set font
-mgrs_mode = False # for switching inbetween modes
+mgrs_mode = True # for switching inbetween modes
 
 #####################################################
 ### how to make and add buttons - needed for AC later
@@ -141,9 +141,9 @@ def update_gps(instance):
         satellites = 0
 
     try:
-        time_string = packet.get_time(local_time=True)
-        date = time_string[0:10]
-        time = time_string[11:19]
+        time_object = packet.get_time()
+        date = time_object.strftime(%Y%m%d)
+        time = time_object.strftime(%H%M%S)
     except:
         date = "----------"
         time = "--------"
@@ -202,7 +202,7 @@ gps_handle = gps_printout
 btn1 = make_button('B1',B1)
 btn2 = make_button('B2',B2)
 btn3 = make_button('B3',B3)
-btn4 = make_button(' GPS \n MODE',LatLon_MGRS)
+btn4 = make_button(' GPS \nMODE',LatLon_MGRS)
 btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
