@@ -25,12 +25,12 @@ from six.moves.urllib.request import urlopen, Request
 #image stuff
 import smopy
 
-#get serial data
-#import serial.tools.list_ports
+#get gps data
+import gpsd
 
 #mgrs stuff
 import mgrs
-
+m = mgrs.MGRS()
 
 
 #####################################################
@@ -41,8 +41,6 @@ Window.show_cursor = False # remove mouse
 font_size = 22.5 #font size
 quantico = "courier-prime-sans.ttf" #set font
 mgrs_mode = False # for switching inbetween modes
-
-
 
 #####################################################
 ### how to make and add buttons - needed for AC later
@@ -94,30 +92,72 @@ def LatLon_MGRS(instance):
         mgrs_mode = False
         gps_handle.text = mgrs_display_string
 
-
-a = 1
 def update_gps(instance):
     """
     Update GPS info at regular intervals
     """
+    latlon_display_string = "    DecDeg\n  {date}\n   {time}\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} ft\nSat: {satellites:.0f}"
 
-    ### get serial data
-    global a
-    a += 1
-    b = str(a)
+    mgrs_display_string = "     MGRS\n  {date}\n   {time}\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} ft\nSat: {satellites:.0f}"
 
-    datetime = "  2021-03-30\n   12:34:56\n"
+
+    #poll the packet
+    try:
+        packet = gpsd.get_current()
+    except:
+        packet = 'not a packet'
+
+    #try to get all the info, else set the value to "----""
+    try:
+        latitude, longitude = packet.position()
+    except:
+        latitude = 0
+        longitude = 0
+    
+    try:
+        altitude = packet.position()
+        altitude *= 3.28084
+    except: 
+        altitude = 0
+
+    try: 
+        vector = packet.speed()
+        speed = vector['speed']
+        speed *= 2.23694
+        direction = vector['track']
+    except:
+        speed = 0
+        direction = 0
+
+    try:
+        error = packet.position_precision()
+        error *= 3.28084
+    except:
+        error = 0
+
+    try:
+        satellites = packet.sats_valid
+    except:
+        satellites = 0
+
+    try:
+        time_string = packet.get_time(local_time=True)
+        date = time_string[0:10]
+        time = time_string[11:19]
+    except:
+        date = "----------"
+        time = "--------"
 
     if mgrs_mode == True:
-        ## edit mgrs_mode string
-        #parse string into mgrs_mode
-        mgrs_display_string = "     MGRS\n" +datetime+ "GZD: 10S\nSID: GJ\nEWP: 12345\nNSP: 12345\nAlt: 500 ft\nVel: 0.0mph\nDir: 123.7 deg\nSat: 8\nCtr: " + b
-        gps_handle.text = mgrs_display_string
+        mgrs_string = m.toMGRS(latitude, longitude)
+        GZD = mgrs_string[0:3]
+        SID = mgrs_string[3:5]
+        EWP = mgrs_string[5:10]
+        NSP = mgrs_string[10:15]
+        gps_handle.text = mgrs_display_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
     else:
-        ### edit LatLon string
-        latlon_display_string = "    DecDeg\n" +datetime+ "Lat: 30.12345\nLon: -97.12345\nAlt: 500 ft\nVel: 0.0mph\nDir: 123.7 deg\nSat: 8\nCtr: " + b
-        gps_handle.text = latlon_display_string
+        gps_handle.text = latlon_display_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
 
 
@@ -132,35 +172,7 @@ lathigh = 30.363
 lonlow = -97.790
 lonhigh = -97.7793
 
-def deg2num(latitude, longitude, zoom, do_round=True):
-    """Convert from latitude and longitude to tile numbers.
-    If do_round is True, return integers. Otherwise, return floating point
-    values.
-    Source: http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Python
-    """
-    lat_rad = np.radians(latitude)
-    n = 2.0 ** zoom
-    if do_round:
-        f = np.floor
-    else:
-        f = lambda x: x
-    xtile = f((longitude + 180.) / 360. * n)
-    ytile = f((1.0 - np.log(np.tan(lat_rad) + (1 / np.cos(lat_rad))) / np.pi) /
-              2. * n)
-    if do_round:
-        if isinstance(xtile, np.ndarray):
-            xtile = xtile.astype(np.int32)
-        else:
-            xtile = int(xtile)
-        if isinstance(ytile, np.ndarray):
-            ytile = ytile.astype(np.int32)
-        else:
-            ytile = int(ytile)
-    return (xtile, ytile)
-
-
 mymap = smopy.Map((latlow, lonlow, lathigh, lonhigh))
-
 fig, ax = plt.subplots()
 fig = plt.figure()
 fig.set_size_inches([1,1])
@@ -170,17 +182,17 @@ ax.set_axis_off()
 fig.add_axes(ax) 
 ax.imshow(mymap.img)
 
-
-
 gps_map= BoxLayout(orientation='vertical')
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
+#TODO:#### change this to the categories but emtpy@!!
 latlon_display_string = " "
 mgrs_display_string = " "
 
 gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
 gps_handle = gps_printout
+
 
 
 ############################################################
@@ -201,15 +213,19 @@ gps_layout.add_widget(gps_printout)
 
 
 
+#############################################################
+########### ACTUALLY START THE PROGRAM ######################
+#############################################################
+
+gpsd.connect()
+
 class MyApp(App):
     def build(self):
-        Clock.schedule_interval(update_gps, 1)
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
+        Clock.schedule_interval(update_gps, .25)
         return total_layout
-
-
 
 if __name__ == '__main__':
     MyApp().run()
