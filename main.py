@@ -104,11 +104,11 @@ def LatLon_MGRS(instance):
     global mgrs_mode
     if mgrs_mode == False:
         mgrs_mode = True
-        gps_handle.text = latlon_display_string
+        #gps_handle.text = latlon_display_string
 
     else:
         mgrs_mode = False
-        gps_handle.text = mgrs_display_string
+        #gps_handle.text = mgrs_display_string
 
 
 def regular_update(instance):
@@ -124,6 +124,7 @@ def update_gps():
     global latlon_display_string
     global mgrs_display_string
     global map_url
+    global mgrs_mode
 
     #poll the packet
     try:
@@ -189,6 +190,10 @@ def update_gps():
 #    else:
     latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
+    if mgrs_mode == True:
+        gps_handle.text = mgrs_display_string
+    else:
+        gps_handle.text = latlon_display_string
 
 
 ##############################################################
