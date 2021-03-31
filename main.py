@@ -106,15 +106,17 @@ def update_gps(instance):
     a += 1
     b = str(a)
 
+    datetime = "  2021-03-30\n   12:34:56\n"
+
     if mgrs_mode == True:
         ## edit mgrs_mode string
         #parse string into mgrs_mode
-        mgrs_display_string = " MGRS: " + b
+        mgrs_display_string = "     MGRS\n" +datetime+ "GZD: 10S\nSID: GJ\nEWP: 12345\nNSP: 12345\nAlt: 500 ft\nVel: 0.0mph\nDir: 123.7 deg\nSat: 8\nCtr: " + b
         gps_handle.text = mgrs_display_string
 
     else:
         ### edit LatLon string
-        latlon_display_string = "\n  2013-01-24\n   08:56:30\nLat: 30.12345\nLon: -97.12345\nAlt: 500 ft\nVel: 0.0mph\nDir: 123.7 deg\nSat: 8\nCtr: " + b
+        latlon_display_string = "    DecDeg\n" +datetime+ "Lat: 30.12345\nLon: -97.12345\nAlt: 500 ft\nVel: 0.0mph\nDir: 123.7 deg\nSat: 8\nCtr: " + b
         gps_handle.text = latlon_display_string
 
 
@@ -188,7 +190,7 @@ gps_handle = gps_printout
 btn1 = make_button('B1',B1)
 btn2 = make_button('B2',B2)
 btn3 = make_button('B3',B3)
-btn4 = make_button('Lat/Lon \n  MGRS',LatLon_MGRS)
+btn4 = make_button('GPS \n  MODE',LatLon_MGRS)
 btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
