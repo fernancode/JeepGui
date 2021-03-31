@@ -1,4 +1,8 @@
-#works on desktop...and works on pi
+"""
+Fernando de la Fuente
+JEEPGPS Gui
+"""
+
 import kivy
 from kivy.app import App
 from kivy.clock import Clock
@@ -12,26 +16,11 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 from kivy.properties import StringProperty
-
-
-#matplotlib
 import matplotlib.pyplot as plt
-
 import numpy as np
-from six import BytesIO
-from six.moves.urllib.request import urlopen, Request
-
-##real poor resolution
-#image stuff
-import smopy
-
-#get gps data
-import gpsd
-
-#mgrs stuff
-import mgrs
-m = mgrs.MGRS()
-
+import smopy #map plotter library
+import gpsd #gpsd library
+import mgrs #mgrs library
 
 #####################################################
 ## set some stuff beforehand
@@ -40,6 +29,7 @@ Window.fullscreen = 'auto' # default to fullscreen
 Window.show_cursor = False # remove mouse
 font_size = 22.5 #font size
 quantico = "courier-prime-sans.ttf" #set font
+m = mgrs.MGRS()
 mgrs_mode = False # for switching inbetween modes
 #display strings for text
 latlon_format_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
@@ -110,13 +100,11 @@ def LatLon_MGRS(instance):
         mgrs_mode = False
         #gps_handle.text = mgrs_display_string
 
-def regular_update(instance):
-    update_gps()
-
-def update_gps():
+def update_gps(instance):
     """
     Update GPS info at regular intervals
     """
+
     global latlon_format_string
     global mgrs_format_string
     global latlon_display_string
@@ -124,13 +112,11 @@ def update_gps():
     global map_url
     global mgrs_mode
 
-    #poll the packet
     try:
         packet = gpsd.get_current()
     except:
         packet = 'not a packet'
 
-    #try to get all the info, else set the value to "----""
     try:
         latitude, longitude = packet.position()
     except:
@@ -154,15 +140,12 @@ def update_gps():
 
     try:
         error, errorz = packet.position_precision()
-        #error *= 3.28084
     except:
         error = 0
-
     try:
         satellites = packet.sats_valid
     except:
         satellites = 0
-
     try:
         time_object = packet.get_time(local_time=True)
         date = time_object.strftime("%Y-%m-%d")
@@ -170,7 +153,6 @@ def update_gps():
     except:
         date = "----------"
         time = "--------"
-
     try:
         map_url = packet.map_url()
     except:
@@ -182,8 +164,8 @@ def update_gps():
     SID = mgrs_string[3:5]
     EWP = mgrs_string[5:10]
     NSP = mgrs_string[10:15]
+    #format strings
     mgrs_display_string = mgrs_format_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
-
     latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
     if mgrs_mode == True:
@@ -246,7 +228,7 @@ class MyApp(App):
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
-        Clock.schedule_interval(regular_update, 0.25)
+        Clock.schedule_interval(update_gps, 0.25)
         return total_layout
 
 if __name__ == '__main__':
