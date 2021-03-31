@@ -38,7 +38,7 @@ import mgrs
 #####################################################
 Window.fullscreen = 'auto' # default to fullscreen
 Window.show_cursor = False # remove mouse
-font_size = 25 #font size
+font_size = 22.5 #font size
 quantico = "courier-prime-sans.ttf" #set font
 mgrs_mode = False # for switching inbetween modes
 
@@ -53,7 +53,7 @@ def make_button(command,func):
     function for adding a lot of buttons
     """
 
-    btn = Button(text=command, font_size=30)
+    btn = Button(text=command, font_size=25)
     btn.bind(on_press = func)
     buttons.append(btn)
     return buttons
@@ -114,7 +114,7 @@ def update_gps(instance):
 
     else:
         ### edit LatLon string
-        latlon_display_string = "\n2013-01-24T08:56:30\nLat: 30.12345\nLon: -97.12345\nAlt: 500 ft\nSpeed: 0.0mph\nHeading: 123.7 deg\nSatellites: 8\n" + b
+        latlon_display_string = "\n2013-01-24\nT08:56:30\nLat: 30.12345\nLon: 97.12345\nAlt: 500 ft\nSpeed: 0.0mph\nHeading: 123.7 deg\nSatellites: 8\n" + b
         gps_handle.text = latlon_display_string
 
 
