@@ -115,13 +115,13 @@ def update_gps(instance):
         longitude = 0
     
     try:
-        altitude = packet.position()
+        altitude = packet.altitude()
         altitude *= 3.28084
     except: 
         altitude = 0
 
     try: 
-        vector = packet.speed()
+        vector = packet.movement()
         speed = vector['speed']
         speed *= 2.23694
         direction = vector['track']
@@ -130,8 +130,8 @@ def update_gps(instance):
         direction = 0
 
     try:
-        error = packet.position_precision()
-        error *= 3.28084
+        errorx, errorz = packet.position_precision()
+        errorx *= 3.28084
     except:
         error = 0
 
