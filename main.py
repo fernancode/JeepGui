@@ -141,9 +141,9 @@ def update_gps(instance):
         satellites = 0
 
     try:
-        time_object = packet.get_time()
-        date = time_object.strftime("%Y%m%d")
-        time = time_object.strftime("%H%M%S")
+        time_object = packet.get_time(local_time=True)
+        date = time_object.strftime("%Y-%m-%d")
+        time = time_object.strftime("%H:%M:%S")
     except:
         date = "----------"
         time = "--------"
