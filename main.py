@@ -43,9 +43,22 @@ quantico = "courier-prime-sans.ttf" #set font
 mgrs_mode = True # for switching inbetween modes
 #display strings for text
 latlon_format_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
-latlon_display_string = " "
 mgrs_format_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
-mgrs_display_string = " "
+
+#initialize stuff
+date = "0000-00-00"
+time = "00:00:00"
+GZD = "XXX"
+SID = "XX"
+EWP = "00000"
+NSP = "00000"
+altitude = 0
+speed = 0
+direction = 0
+error = 0
+satellite = 0
+mgrs_display_string = mgrs_format_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
+latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
 
 
 
@@ -103,9 +116,6 @@ def update_gps(instance):
     global latlon_display_string
     global mgrs_display_string
     global map_url
-    #latlon_display_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
-
-    #mgrs_display_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
 
     #poll the packet
     try:
