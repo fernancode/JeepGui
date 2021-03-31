@@ -41,6 +41,11 @@ Window.show_cursor = False # remove mouse
 font_size = 22.5 #font size
 quantico = "courier-prime-sans.ttf" #set font
 mgrs_mode = True # for switching inbetween modes
+#display strings for text
+latlon_display_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
+mgrs_display_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
+
+
 
 #####################################################
 ### how to make and add buttons - needed for AC later
@@ -91,9 +96,12 @@ def update_gps(instance):
     """
     Update GPS info at regular intervals
     """
-    latlon_display_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
+    global latlon_display_string
+    global mgrs_display_string
+    global map_url
+    #latlon_display_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
 
-    mgrs_display_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
+    #mgrs_display_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
 
     #poll the packet
     try:
@@ -142,6 +150,12 @@ def update_gps(instance):
         date = "----------"
         time = "--------"
 
+    try:
+        map_url = packet.map_url()
+    except:
+        #TODO:
+        map_url = "default openstreet map location"
+
     if mgrs_mode == True:
         mgrs_string = m.toMGRS(latitude, longitude)
         GZD = mgrs_string[0:3]
@@ -156,10 +170,7 @@ def update_gps(instance):
 
 
 ##############################################################
-#GPS stuff
-
-##READ SERIAL DATA, UPDATE PLOT AND POSITION IN BACKGROUND
-#create the plot, add it to the boxlayout
+#GPS plot stuff
 
 latlow = 30.358
 lathigh = 30.363
@@ -176,16 +187,6 @@ ax.set_axis_off()
 fig.add_axes(ax) 
 ax.imshow(mymap.img)
 
-gps_map= BoxLayout(orientation='vertical')
-gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
-
-#TODO:#### change this to the categories but emtpy@!!
-latlon_display_string = " "
-mgrs_display_string = " "
-
-gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
-gps_printout.bind(size=gps_printout.setter('text_size'))
-gps_handle = gps_printout
 
 
 
@@ -201,7 +202,23 @@ btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
 
+
+
+
+
 gps_layout = BoxLayout(orientation='horizontal')
+
+gps_map= BoxLayout(orientation='vertical')
+gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+
+#TODO:#### change this to the categories but emtpy@!!
+#latlon_display_string = " "
+#mgrs_display_string = " "
+
+gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
+gps_printout.bind(size=gps_printout.setter('text_size'))
+gps_handle = gps_printout
+
 gps_layout.add_widget(gps_map)
 gps_layout.add_widget(gps_printout)
 
@@ -218,7 +235,7 @@ class MyApp(App):
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
-        Clock.schedule_interval(update_gps, .25)
+        Clock.schedule_interval(update_gps, 0.25)
         return total_layout
 
 if __name__ == '__main__':
