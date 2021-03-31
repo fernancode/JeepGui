@@ -21,6 +21,7 @@ import numpy as np
 import smopy #map plotter library
 import gpsd #gpsd library
 import mgrs #mgrs library
+import time
 
 #####################################################
 ## set some stuff beforehand
@@ -228,7 +229,12 @@ class MyApp(App):
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
-        Clock.schedule_interval(update_gps, 0.25)
+
+        start = time.time()
+        Clock.schedule_interval(update_gps, 0.1)
+        end = time.time()
+        print(end-start)
+
         return total_layout
 
 if __name__ == '__main__':
