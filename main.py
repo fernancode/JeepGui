@@ -37,6 +37,7 @@ import mgrs
 ## set some stuff beforehand
 #####################################################
 Window.fullscreen = 'auto' # default to fullscreen
+Window.show_cursor = False # remove mouse
 font_size = 30 #font size
 quantico = "quantico.regular.ttf" #set font
 mgrs_mode = False # for switching inbetween modes
@@ -52,7 +53,7 @@ def make_button(command,func):
     function for adding a lot of buttons
     """
 
-    btn = Button(text=command)
+    btn = Button(text=command, font_size=30)
     btn.bind(on_press = func)
     buttons.append(btn)
     return buttons
@@ -113,7 +114,7 @@ def update_gps(instance):
 
     else:
         ### edit LatLon string
-        latlon_display_string = " Lat/Lon: " + b
+        latlon_display_string = " Lat:\n 30.123456\n Lon:\n -97.123456\n Alt: \n 500\n Sats:\n " + b
         gps_handle.text = latlon_display_string
 
 
@@ -168,16 +169,6 @@ fig.add_axes(ax)
 ax.imshow(mymap.img)
 
 
-#this method looked like shit
-"""
-## find a better way
-fig, ax = plt.subplots()
-fig.patch.set_facecolor('black')
-lakewood_map = smopy.Map((latlow, lonlow, lathigh, lonhigh), z=17)
-lakewood_map.show_mpl(ax=ax)
-x, y = lakewood_map.to_pixels((latlow+lathigh)/2, (lonlow+lonhigh)/2)
-plt.plot(x,y)
-"""
 
 gps_map= BoxLayout(orientation='vertical')
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
@@ -197,7 +188,7 @@ gps_handle = gps_printout
 btn1 = make_button('B1',B1)
 btn2 = make_button('B2',B2)
 btn3 = make_button('B3',B3)
-btn4 = make_button('LatLon/MGRS',LatLon_MGRS)
+btn4 = make_button('Lat/Lon \n     \n MGRS',LatLon_MGRS)
 btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
     btn_layout.add_widget(button)
