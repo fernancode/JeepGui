@@ -101,7 +101,7 @@ def LatLon_MGRS(instance):
         mgrs_mode = False
         #gps_handle.text = mgrs_display_string
 
-def update_gps_string(instance):
+def update_gps_info(instance):
     """
     Update GPS info at regular intervals
     """
@@ -222,19 +222,21 @@ gps_layout.add_widget(gps_map)
 gps_layout.add_widget(gps_printout)
 
 
-
 #############################################################
 ########### ACTUALLY START THE PROGRAM ######################
 #############################################################
 
-gpsd.connect()
+try:
+    gpsd.connect()
+except:
+    print()
 
 class MyApp(App):
     def build(self):
         total_layout = BoxLayout(orientation='horizontal')
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
-        Clock.schedule_interval(update_gps_string, 0.25)
+        Clock.schedule_interval(update_gps_info, 0.25)
         return total_layout
 
 if __name__ == '__main__':
