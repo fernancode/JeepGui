@@ -11,17 +11,21 @@ from kivy.core.text import LabelBase
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
+from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 from kivy.properties import StringProperty
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 import smopy #map plotter library
 import gpsd #gpsd library
 import mgrs #mgrs library
-import time as timer
+import time as timer #time mapping function stuff
+from subprocess import call
 
 #####################################################
 ## set some stuff beforehand
@@ -60,18 +64,44 @@ latlon_display_string = latlon_format_string.format(date=date, time=time, latitu
 ### how to make and add buttons - needed for AC later
 #####################################################
 buttons=[]
+
+def shutdown_pi():
+    call("sudo shutdown -h now", shell=True)
+
 def make_button(command,func):
     """
     function for adding a lot of buttons
     """
 
     btn = Button(text=command, font_size=25)
-    btn.bind(on_press = func)
+    btn.bind(on_press=func)
     buttons.append(btn)
     return buttons
 
 def QUIT(instance):
-    App.get_running_app().stop()
+
+    exit_button = Button(text="Quit", font_size=25)
+    exit_button.bind(on_press=App.get_running_app().stop)
+
+    shutdown_button = Button(text="Shutdown", font_size=25)
+    shutdown_button.bind(on_press=shutdown_pi)
+
+    cancel_button = Button(text="Cancel", font_size=25)
+    #cancel_button.bind(on_press=quit_popup.dismiss)    
+    
+    layout = BoxLayout(orientation="horizontal")
+    layout.add_widget(exit_button)
+    layout.add_widget(shutdown_button)
+    quit_popup = Popup(title="QUIT", size_hint=(.5,.3))#, content=Label(text="layout"))#shutdown_button])
+    quit_popup.add_widget(layout)
+    cancel_button.bind(on_press=quit_popup.dismiss)
+
+    #shutdown_button.bind(on_press=call("sudo shutdown -h now", shell=True))
+    #quit_popup.add_widget(exit_button)
+    #quit_popup.add_widget(shutdown_button)
+    #quit_popup.add_widget(cancel_button)
+    quit_popup.open()
+    
 
 def B2(instance):
     print()
