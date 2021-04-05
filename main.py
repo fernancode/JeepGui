@@ -65,7 +65,7 @@ latlon_display_string = latlon_format_string.format(date=date, time=time, latitu
 #####################################################
 buttons=[]
 
-def shutdown_pi():
+def shutdown_pi(instance):
     call("sudo shutdown -h now", shell=True)
 
 def make_button(command,func):
@@ -85,21 +85,13 @@ def QUIT(instance):
 
     shutdown_button = Button(text="Shutdown", font_size=25)
     shutdown_button.bind(on_press=shutdown_pi)
-
-    cancel_button = Button(text="Cancel", font_size=25)
-    #cancel_button.bind(on_press=quit_popup.dismiss)    
     
     layout = BoxLayout(orientation="horizontal")
     layout.add_widget(exit_button)
     layout.add_widget(shutdown_button)
-    quit_popup = Popup(title="QUIT", size_hint=(.5,.3))#, content=Label(text="layout"))#shutdown_button])
-    quit_popup.add_widget(layout)
-    cancel_button.bind(on_press=quit_popup.dismiss)
 
-    #shutdown_button.bind(on_press=call("sudo shutdown -h now", shell=True))
-    #quit_popup.add_widget(exit_button)
-    #quit_popup.add_widget(shutdown_button)
-    #quit_popup.add_widget(cancel_button)
+    quit_popup = Popup(title="QUIT", size_hint=(.5,.4))#, content=Label(text="layout"))#shutdown_button])
+    quit_popup.add_widget(layout)
     quit_popup.open()
     
 
