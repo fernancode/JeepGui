@@ -73,7 +73,7 @@ def make_button(command,func):
     function for adding a lot of buttons
     """
 
-    btn = Button(text=command, font_size=25)
+    btn = Button(text=command, font_size=25, background_color=(1,1,1,.5)) #background_color=(.75,0,1,.3) purple
     btn.bind(on_press=func)
     buttons.append(btn)
     return buttons
@@ -94,7 +94,6 @@ def QUIT(instance):
     quit_popup.add_widget(layout)
     quit_popup.open()
     
-
 def B2(instance):
     print()
     #now=datetime.now()
