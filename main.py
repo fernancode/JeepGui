@@ -36,6 +36,8 @@ font_size = 22.5 #font size
 quantico = "courier-prime-sans.ttf" #set font
 m = mgrs.MGRS()
 mgrs_mode = False # for switching inbetween modes
+show_map = True
+map_url = "default openstreet map location"
 #display strings for text
 latlon_format_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
 mgrs_format_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
@@ -209,7 +211,7 @@ lathigh = 30.363
 lonlow = -97.790
 lonhigh = -97.7793
 
-mymap = smopy.Map((latlow, lonlow, lathigh, lonhigh))
+#mymap = smopy.Map((latlow, lonlow, lathigh, lonhigh))
 fig, ax = plt.subplots()
 fig = plt.figure()
 fig.set_size_inches([1,1])
@@ -218,7 +220,6 @@ ax = plt.Axes(fig, [0,0,1,1])
 ax.set_axis_off()
 fig.add_axes(ax) 
 #ax.imshow(mymap.img)
-
 
 
 ############################################################
@@ -258,6 +259,7 @@ class MyApp(App):
         total_layout.add_widget(btn_layout)
         total_layout.add_widget(gps_layout)
         Clock.schedule_interval(update_gps_info, 0.25)
+#        Clock.schedule_interval(gps_plot, 3)
         return total_layout
 
 if __name__ == '__main__':
