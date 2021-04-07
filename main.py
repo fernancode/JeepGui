@@ -15,9 +15,10 @@ from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
+from kivy.uix.slider import Slider
+
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 from kivy.properties import StringProperty
-
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,6 +27,7 @@ import gpsd #gpsd library
 import mgrs #mgrs library
 import time as timer #time mapping function stuff
 from subprocess import call
+import screen_brightness_control as sbc
 
 #####################################################
 ## set some stuff beforehand
@@ -92,24 +94,35 @@ def QUIT(instance):
     layout.add_widget(exit_button)
     layout.add_widget(shutdown_button)
 
-    quit_popup = Popup(title="QUIT", size_hint=(.5,.4))#, content=Label(text="layout"))#shutdown_button])
+    quit_popup = Popup(title="QUIT", size_hint=(.5,.4))
     quit_popup.add_widget(layout)
     quit_popup.open()
     
 def B2(instance):
     print()
-    #now=datetime.now()
-    #string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Disarm"
-    #string = {string:'out'}
-    #add_messages(string)
-    #device.send_data_broadcast('disarm')
 
-def B3(instance):
-    print()#now=datetime.now()
-    #string = now.strftime("%H:%M:%S")+ "    DELIVERED:      Launch"
-    #string = {string:'out'}
-    #add_messages(string)
-    #device.send_data_broadcast('relay_on')
+
+class option_popup(Popup):
+    def __init__(self):
+        super().__init__()
+        self.title='OPTIONS'
+        self.size_hint = (.6,.5)
+        self.orientation='horizontal'
+        
+        self.layout = BoxLayout(orientation='vertical')
+        self.add_widget(self.layout)
+        self.layout.add_widget(Label(text="Brightness"))
+        self.slider = Slider(min=0, max=100, value =100, orientation='horizontal')
+        self.layout.add_widget(self.slider)
+        self.slider.bind(value = self.on_value_change)
+        self.open()
+        
+    def on_value_change(self, instance, value):
+        sbc.set_brightness(value)
+
+def OPTIONS(instance):
+    return option_popup()
+
 
 def LatLon_MGRS(instance):
     """
@@ -227,8 +240,8 @@ fig.add_axes(ax)
 ############################################################
 
 btn1 = make_button('  GPS\nMODE',LatLon_MGRS)
-btn2 = make_button('B2',B2)
-btn3 = make_button('B3',B3)
+btn2 = make_button('AC',B2)
+btn3 = make_button('OPTIONS',OPTIONS)
 btn4 = make_button('QUIT',QUIT)
 btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
 for button in buttons: 
