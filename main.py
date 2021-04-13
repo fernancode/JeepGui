@@ -3,31 +3,30 @@ Fernando de la Fuente
 JEEPGPS Gui
 """
 
+import time as timer  # time mapping function stuff
+from subprocess import call
+
+import gpsd  # gpsd_py3 library
 import kivy
+import matplotlib.pyplot as plt
+import mgrs  # mgrs library
+import numpy as np
+import screen_brightness_control as sbc
+
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.core.window import Window
 from kivy.core.text import LabelBase
-from kivy.uix.label import Label
-from kivy.uix.button import Button
-from kivy.uix.widget import Widget
-from kivy.uix.popup import Popup
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.slider import Slider
-
+from kivy.core.window import Window
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 from kivy.properties import StringProperty
-
-import matplotlib.pyplot as plt
-import numpy as np
-import smopy #map plotter library
-import gpsd #gpsd library
-import mgrs #mgrs library
-import time as timer #time mapping function stuff
-from subprocess import call
-import screen_brightness_control as sbc
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+from kivy.uix.slider import Slider
+from kivy.uix.textinput import TextInput
+from kivy.uix.widget import Widget
 
 #####################################################
 ## set some stuff beforehand
@@ -39,7 +38,7 @@ quantico = "courier-prime-sans.ttf" #set font
 m = mgrs.MGRS()
 mgrs_mode = False # for switching inbetween modes
 show_map = True
-map_url = "default openstreet map location"
+map_url = "default openstreetmap location"
 #display strings for text
 latlon_format_string = "\n    DecDeg\n  {date}\n   {time}\n\nLat: {latitude:.5f}\nLon: {longitude:.5f}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
 mgrs_format_string = "\n     MGRS\n  {date}\n   {time}\n\nGZD: {GZD}\nSID: {SID}\nEWP: {EWP}\nNSP: {NSP}\nAlt: {altitude:.1f} ft\nVel: {speed:.1f} mph\nDir: {direction:.1f} deg\nErr: {error:.1f} m\nSat: {satellites:.0f}"
@@ -102,6 +101,7 @@ def B2(instance):
     print()
 
 
+
 class option_popup(Popup):
     def __init__(self):
         super().__init__()
@@ -118,7 +118,13 @@ class option_popup(Popup):
         self.open()
         
     def on_value_change(self, instance, value):
-        sbc.set_brightness(value)
+        try:
+            sbc.set_brightness(value)
+        except:
+            pass
+
+
+
 
 def OPTIONS(instance):
     return option_popup()
@@ -224,7 +230,7 @@ lathigh = 30.363
 lonlow = -97.790
 lonhigh = -97.7793
 
-#mymap = smopy.Map((latlow, lonlow, lathigh, lonhigh))
+
 fig, ax = plt.subplots()
 fig = plt.figure()
 fig.set_size_inches([1,1])
@@ -249,7 +255,10 @@ for button in buttons:
 
 gps_layout = BoxLayout(orientation='horizontal')
 gps_map= BoxLayout(orientation='vertical')
+
+#TODO:
 gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+
 gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
 gps_handle = gps_printout
