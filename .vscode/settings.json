@@ -1,4 +1,4 @@
 {
     "git.ignoreLimitWarning": true,
-    "python.pythonPath": "d:\\Documents\\Python\\jeepgui\\jeepguiwindows\\Scripts\\python.exe"
+    "python.pythonPath": "jeepguiwindows\\Scripts\\python.exe"
 }
