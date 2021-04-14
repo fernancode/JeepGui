@@ -246,7 +246,7 @@ class GPS_widget(Widget):
         #self.browser_widget = CefBrowser(start_url="file:///leaflet.html")
 
         self.layout = BoxLayout(orientation='horizontal')
-        self.layout.add_widget(self.browser_widget)
+        #self.layout.add_widget(self.browser_widget)
         self.layout.add_widget(self.text)
 #        self.layout.size_hint = (.85,1)
 
