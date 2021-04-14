@@ -6,23 +6,23 @@ import sys
 import os
 import time
 #from cefpython3 import cefpython as cef
-if sys.platform == 'linux':
-    import pygtk
-    import gtk
-    pygtk.require('2.0')
-elif sys.platform == 'darwin':
-    import gi
-    gi.require_version("Gtk", "3.0")
-    from gi.repository import Gtk
-elif sys.platform == 'win32':
+#if sys.platform == 'linux':
+#    import pygtk
+#    import gtk
+#    pygtk.require('2.0')
+#elif sys.platform == 'darwin':
+#    import gi
+#    gi.require_version("Gtk", "3.0")
+#    from gi.repository import Gtk
+#elif sys.platform == 'win32':
     # no gtk needed on Windows
-    pass
+#    pass
 import time as timer  # time mapping function stuff
 from subprocess import call
 import gpsd  # gpsd_py3 library
 import kivy
 import mgrs  # mgrs library
-import numpy as np
+#import numpy as np
 import screen_brightness_control as sbc
 from kivy.app import App
 from kivy.clock import Clock
