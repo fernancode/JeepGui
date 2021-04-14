@@ -309,7 +309,7 @@ class GPS_widget(Widget):
         else:
             self.gps_text = self.latlon_fstring.format(date=self.date, time=self.time, latitude=self.latitude, longitude=self.longitude, altitude=self.altitude, speed=self.speed, direction=self.direction, error=self.error, satellites=self.satellites)
 
-        self.text_layout.text = self.gps_text
+        self.text.text = self.gps_text
 
     def update_map(self, instance):
         global toggle_map        
