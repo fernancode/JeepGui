@@ -17,12 +17,12 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.slider import Slider
 
-from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
-from kivy.properties import StringProperty
+#from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
+#from kivy.properties import StringProperty
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
-import smopy #map plotter library
+#import smopy #map plotter library
 import gpsd #gpsd library
 import mgrs #mgrs library
 import time as timer #time mapping function stuff
@@ -225,13 +225,13 @@ lonlow = -97.790
 lonhigh = -97.7793
 
 #mymap = smopy.Map((latlow, lonlow, lathigh, lonhigh))
-fig, ax = plt.subplots()
-fig = plt.figure()
-fig.set_size_inches([1,1])
-fig.patch.set_facecolor('black')
-ax = plt.Axes(fig, [0,0,1,1])
-ax.set_axis_off()
-fig.add_axes(ax) 
+#fig, ax = plt.subplots()
+#fig = plt.figure()
+#fig.set_size_inches([1,1])
+#fig.patch.set_facecolor('black')
+#ax = plt.Axes(fig, [0,0,1,1])
+#ax.set_axis_off()
+#fig.add_axes(ax) 
 #ax.imshow(mymap.img)
 
 
@@ -249,7 +249,7 @@ for button in buttons:
 
 gps_layout = BoxLayout(orientation='horizontal')
 gps_map= BoxLayout(orientation='vertical')
-gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+#gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
 gps_printout.bind(size=gps_printout.setter('text_size'))
 gps_handle = gps_printout
