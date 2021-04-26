@@ -43,7 +43,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 
 Window.fullscreen = 'auto' # default to fullscreen
-Window.show_cursor = False # remove mouse
+#Window.show_cursor = False # remove mouse
 font_size = 22.5 #font size
 quantico = "courier-prime-sans.ttf"
 mgrs_mode = False
