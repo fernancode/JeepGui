@@ -42,6 +42,24 @@ from kivy.uix.slider import Slider
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 
+<<<<<<< HEAD
+=======
+#from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
+#from kivy.properties import StringProperty
+
+#import matplotlib.pyplot as plt
+import numpy as np
+#import smopy #map plotter library
+import gpsd #gpsd library
+import mgrs #mgrs library
+import time as timer #time mapping function stuff
+from subprocess import call
+import screen_brightness_control as sbc
+
+#####################################################
+## set some stuff beforehand
+#####################################################
+>>>>>>> pi_stable
 Window.fullscreen = 'auto' # default to fullscreen
 #Window.show_cursor = False # remove mouse
 font_size = 22.5 #font size
@@ -1183,6 +1201,7 @@ class ClientHandler:
         return True
     """
 
+<<<<<<< HEAD
     def OnJavascriptDialog(self, suppress_message_out, **_):
         suppress_message_out[0] = True
         return False
@@ -1190,6 +1209,121 @@ class ClientHandler:
     def OnBeforeUnloadJavascriptDialog(self, callback, **_):
         callback.Continue(allow=True, userInput="")
         return True
+=======
+    global latlon_format_string
+    global mgrs_format_string
+    global latlon_display_string
+    global mgrs_display_string
+    global map_url
+    global mgrs_mode
+    start = timer.time()
+
+    try:
+        packet = gpsd.get_current()
+    except:
+        packet = 'not a packet'
+
+    try:
+        latitude, longitude = packet.position()
+    except:
+        latitude = 0
+        longitude = 0
+    
+    try:
+        altitude = packet.altitude()
+        altitude *= 3.28084
+    except: 
+        altitude = 0
+
+    try: 
+        vector = packet.movement()
+        speed = vector['speed']
+        speed *= 2.23694
+        direction = vector['track']
+    except:
+        speed = 0
+        direction = 0
+
+    try:
+        error, errorz = packet.position_precision()
+    except:
+        error = 0
+    try:
+        satellites = packet.sats_valid
+    except:
+        satellites = 0
+    try:
+        time_object = packet.get_time(local_time=True)
+        date = time_object.strftime("%Y-%m-%d")
+        time = time_object.strftime("%H:%M:%S")
+    except:
+        date = "----------"
+        time = "--------"
+    try:
+        map_url = packet.map_url()
+    except:
+        #TODO:
+        map_url = "default openstreet map location"
+
+    mgrs_string = m.toMGRS(latitude, longitude)
+    GZD = mgrs_string[0:3]
+    SID = mgrs_string[3:5]
+    EWP = mgrs_string[5:10]
+    NSP = mgrs_string[10:15]
+    #format strings
+    mgrs_display_string = mgrs_format_string.format(date=date, time=time, GZD=GZD, SID=SID, EWP=EWP, NSP=NSP, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
+    latlon_display_string = latlon_format_string.format(date=date, time=time, latitude=latitude, longitude=longitude, altitude=altitude, speed=speed, direction=direction, error=error, satellites=satellites)
+
+    if mgrs_mode == True:
+        gps_handle.text = mgrs_display_string
+    else:
+        gps_handle.text = latlon_display_string
+
+    #TODO: TIMING CODE EXECUTION FOR WHEN MAP PLOTTING HAPPENS
+    end = timer.time()
+    print(end-start)
+
+
+##############################################################
+#GPS plot stuff
+
+latlow = 30.358
+lathigh = 30.363
+lonlow = -97.790
+lonhigh = -97.7793
+
+#mymap = smopy.Map((latlow, lonlow, lathigh, lonhigh))
+#fig, ax = plt.subplots()
+#fig = plt.figure()
+#fig.set_size_inches([1,1])
+#fig.patch.set_facecolor('black')
+#ax = plt.Axes(fig, [0,0,1,1])
+#ax.set_axis_off()
+#fig.add_axes(ax) 
+#ax.imshow(mymap.img)
+
+
+############################################################
+# ADD ALL BUTTONS, NEST BOXES, AND MAP TO FUNCTIONS
+############################################################
+
+btn1 = make_button('  GPS\nMODE',LatLon_MGRS)
+btn2 = make_button('AC',B2)
+btn3 = make_button('OPTIONS',OPTIONS)
+btn4 = make_button('QUIT',QUIT)
+btn_layout = BoxLayout(orientation='vertical',size_hint=(.15,1))
+for button in buttons: 
+    btn_layout.add_widget(button)
+
+gps_layout = BoxLayout(orientation='horizontal')
+gps_map= BoxLayout(orientation='vertical')
+#gps_map.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+gps_printout = Label(text=latlon_display_string, size_hint=(.4, 1), font_name=quantico, font_size = font_size, valign='top')
+gps_printout.bind(size=gps_printout.setter('text_size'))
+gps_handle = gps_printout
+gps_layout.add_widget(gps_map)
+gps_layout.add_widget(gps_printout)
+>>>>>>> pi_stable
 
     def StartDragging(self, drag_data, x, y, **_):
         print("[kivy_.py] ~~ StartDragging")
